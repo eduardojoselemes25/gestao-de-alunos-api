@@ -1,20 +1,24 @@
 import request from 'supertest';
 import { expect } from 'chai';
 import app from '../../src/app.js';
-import alunos from '../data/alunos.json' assert { type: 'json' };
-import { loginAdmin } from '../../helpers/adminHelper.js';
+import alunosData from '../data/alunos.json' assert { type: 'json' };
+import { getAdminToken } from '../../helpers/adminHelper.js';
 
 describe('Cadastro de alunos', () => {
-    alunos.forEach((aluno) => {
-        it(`deve cadastrar ${aluno.nome}`, async () => {
-            const token = await loginAdmin(app);
+  let adminToken;
 
-            const response = await request(app)
-                .post('/api/admin/alunos')
-                .set('Authorization', `Bearer ${token}`)
-                .send(aluno);
+  before(async () => {
+    adminToken = await getAdminToken();
+  });
 
-            expect(response.status).to.equal(201);
-        });
+  alunosData.forEach((aluno) => {
+    it(`deve cadastrar ${aluno.nome}`, async () => {
+      const res = await request(app)
+        .post('/api/admin/alunos')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send(aluno);
+
+      expect(res.status).to.equal(201);
     });
+  });
 });
