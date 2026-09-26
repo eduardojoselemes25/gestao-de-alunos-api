@@ -30,10 +30,10 @@ jobs:
           echo ADMIN_EMAIL=admin@escola.com >> .env
           echo ADMIN_PASSWORD=admin123 >> .env
 
-      - name: Iniciar API
+      - name: Iniciar API em segundo plano
         run: |
           npm run dev &
-          sleep 15
+          npx wait-on http://localhost:3000 --timeout 30000
 
       - name: Executar testes
         run: npm test
