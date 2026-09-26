@@ -1,13 +1,16 @@
 import request from 'supertest';
-import 'dotenv/config';
+import app from '../src/app.js';
+import dotenv from 'dotenv';
 
-export async function loginAdmin(app) {
-    const response = await request(app)
-        .post('/api/auth/login')
-        .send({
-            email: process.env.ADMIN_EMAIL,
-            senha: process.env.ADMIN_PASSWORD
-        });
+dotenv.config();
 
-    return response.body.token;
+export async function getAdminToken() {
+  const email = process.env.ADMIN_EMAIL || 'admin@escola.com';
+  const senha = process.env.ADMIN_PASSWORD || 'admin123';
+
+  const res = await request(app)
+    .post('/api/auth/login')
+    .send({ email, senha });
+
+  return res.body.token;
 }
