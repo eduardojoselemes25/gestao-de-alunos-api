@@ -32,8 +32,8 @@ jobs:
 
       - name: Iniciar API em segundo plano
         run: |
-          npm run dev &
-          npx wait-on http://localhost:3000 --timeout 30000
+          node src/server.js &
+          npx wait-on http://localhost:3000 --timeout 15000
 
       - name: Executar testes
         run: npm test
